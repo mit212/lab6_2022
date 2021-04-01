@@ -9,9 +9,9 @@
 #include <Encoder.h>
 
 // Activate Forward Kinematics (FK), Inverse Kinematics (IK), and Circular Path Tracking (CIRCLE)
-//#define FK
+#define FK
 //#define IK
-#define CIRCLE
+//#define CIRCLE
 
 // Manipulator dimensions and joint angle limits
 const float l_1 = 0.1524; // link1 lenth (m)
