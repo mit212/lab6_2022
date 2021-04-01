@@ -11,7 +11,7 @@
 // Activate Forward Kinematics (FK), Inverse Kinematics (IK), and Circular Path Tracking (CIRCLE)
 #define FK
 //#define IK
-//#define CIRCLE
+//#define CI/RCLE
 
 // Manipulator dimensions and joint angle limits
 const float l_1 = 0.1524; // link1 lenth (m)
@@ -125,29 +125,27 @@ void loop() {
   q_1 = Mot1.read() / C2Rad;    // convert to radians
   q_2 = Mot2.read() / C2Rad;    // convert to radians
 
-  // ================================================================
-  // ===                    GET SETPOINT                          ===
-  // ================================================================
-
-  // define a set point to test forward kinematics (FK)
+// Forward Kinematics
 #ifdef FK
-    //TO DO
-    //Implement the Forward_K() function below to compute the end-effector position.
+    // TO DO
+    // Implement the Forward_K() function below to compute the end-effector position.
     // Use set_point_1 and set_point_2 to command angular positions.
-    //Try to compare the true position and the actual position of the end-effector.
-
+    // Try to compare the true position and the actual position of the end-effector.
+    
     Forward_K();
 #endif
 
+// Inverse Kinematics
 #ifdef IK
-    //TO DO
-    //Implement the Inverse_K() function below to compute the inverse kinematics of the manipulator.
-    //Use x_e and y_e to give end-effector position.
-    //Try to compare the true position and the actual position of the end-effector.
+    // TO DO
+    // Implement the Inverse_K() function below to compute the inverse kinematics of the manipulator.
+    // Use x_e and y_e to give end-effector position.
+    // Try to compare the true position and the actual position of the end-effector.
 
     Inverse_K();
 #endif
 
+// Circular Path
 #ifdef CIRCLE
     // TO DO
     // Implement the equation of a circle in parametric form.
