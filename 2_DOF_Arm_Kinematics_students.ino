@@ -11,7 +11,7 @@
 // Activate Forward Kinematics (FK), Inverse Kinematics (IK), and Circular Path Tracking (CIRCLE)
 #define FK
 //#define IK
-//#define CI/RCLE
+//#define CIRCLE
 
 // Manipulator dimensions and joint angle limits
 const float l_1 = 0.1524; // link1 lenth (m)
@@ -154,6 +154,7 @@ void loop() {
     // You can use CircleCenterX, CircleCenterY, and Radius to generate the circular path.
 
     Inverse_K(); // Inverse kinematics
+    i+=1;
 #endif
 
 
@@ -196,7 +197,7 @@ void loop() {
   Serial.print(q_2); Serial.print("\t"); // set_point_2, q_2
   Serial.print("\n");
 #endif
-  i++;
+  
   delay(30);
   loop_time = (micros() - timer) / 1000000.0;  //compute actual sample time
 }
@@ -223,7 +224,7 @@ void Inverse_K()
   //You can use q_1_ik, and q_2_ik to store the IK solutions.
   
   
-  // position limit constraints (update set_point_1 and set_point_2 when the solutions are within the limits)
+  // position limit constraints (update set_point_1 and set_point_2 when the solutions are within the limits, q1_limit and q2_limit)
 
 }
 
