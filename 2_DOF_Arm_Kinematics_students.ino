@@ -18,21 +18,25 @@
 // Manipulator dimensions and joint angle limits
 const float l_1 = 0.1524; // link1 lenth (m)
 const float l_2 = 0.1524; // link2 lenth (m)
-const float q1_limit = 113.7 * M_PI / 180; // joint angle limit for q1 (rad)
-const float q2_limit = 161.0 * M_PI / 180; // joint angle limit for q2 (rad)
+const float q1_limit = 113.7 * M_PI / 180; // joint angle limit for q1 (rad), M_PI is slightly more accurate and more portable then PI
+const float q2_limit = 161.0 * M_PI / 180; // joint angle limit for q2 (rad), M_PI is slightly more accurate and more portable then PI
 
 // ================================================================
 // ===               PID FEEDBACK CONTROLLER                    ===
 // ================================================================
 
-// Provide PID controller gains here
+// Provide PID controller gains here (use the gains from Lab 5 as your starting point
 
-float Kp_1 = 8 * 155.0;
-float Kd_1 = 8 * 12.0;
+// Motor 1 requires higher gains due to larger moment of inertia
+// Try 1.5 - 2.5 times the Motor 2 gains
+float Kp_1 = 0.0;
+float Kd_1 = 0.0;
 float Ki_1 = 0.0;
 
-float Kp_2 = 4 * 155.0;
-float Kd_2 = 4 * 12.0;
+// Motor 2 requires smaller gains compared to Motor 1
+// Try 3 - 5 times the gains from previous lab
+float Kp_2 = 0.0;
+float Kd_2 = 0.0;
 float Ki_2 = 0.0;
 
 // control sampling period
@@ -45,8 +49,8 @@ float Ki_2 = 0.0;
 // Switch between built-in Serial Plotter and Matlab streaming
 // comment out both to disable serial output
 
-//#define PRINT_DATA
-#define MATLAB_SERIAL_READ
+#define PRINT_DATA
+//#define MATLAB_SERIAL_READ
 
 // ================================================================
 // ===               DFROBOT MOTOR SHIELD DEFINITION            ===
@@ -94,8 +98,8 @@ double loop_time = 0.01;
 double Pcontrol, Icontrol, Dcontrol;
 double pwm;
 float vc;
-double set_point_1 = 0; // Set point (desired position) for the motor 1
-double set_point_2 = 0; // Set point (desired position) for the motor 2
+double set_point_1 = 0; // Set point (desired joint position) for motor 1
+double set_point_2 = 0; // Set point (desired joint position) for motor 2
 double x_e, y_e; // end-effector position
 double q_1_ik, q_2_ik; // inverse kinematics solutions
 int i = 0; // To generate waypoints of the circular path.
@@ -140,7 +144,10 @@ void loop() {
     //TO DO
     //Implement the Forward_K() function below to compute the end-effector position.
     //Try to compare the true position and the actual position of the end-effector.
-
+    //You can convert degrees to radians by doing: angle_in_radians = angle_in_degrees * M_PI / 180.0;
+    
+//    set_point_1 = ;
+//    set_point_2 = ;
     Forward_K();
 #endif
 
@@ -148,7 +155,9 @@ void loop() {
     //TO DO
     //Implement the Inverse_K() function below to compute the inverse kinematics of the manipulator.
     //Try to compare the true position and the actual position of the end-effector.
-
+    
+//    x_e = ;
+//    y_e = ;
     Inverse_K();
 #endif
 
@@ -156,11 +165,13 @@ void loop() {
     // TO DO
     // Implement the equation of a circle in parametric form.
     // You can use the variable i to generate waypoints in each loop.
-    // For example, i*(PI/180) will increase the angle by 1 deg per each loop.
+    // For example, i*(PI/180) will increase the angle by i deg per each loop.
     // You can use CircleCenterX, CircleCenterY, and Radius to generate the circular path.
+    
+//    x_e = ;
+//    y_e = ;    
     Inverse_K(); // Inverse kinematics
 #endif
-
 
     // ================================================================
     // ===                    CONTROLLER CODE                       ===
@@ -213,7 +224,7 @@ void loop() {
   Serial.print("\n");
 #endif
 
-    i++;
+    i++;  // change this line to i+=2; for every 2 degrees per samping period.
     //  delay(30);
   }
   loop_time = (micros() - timer) / 1000000.0;  //compute actual sample time
@@ -227,6 +238,9 @@ void Forward_K()
   //TO DO
   //Update x_e and y_e with the forward kinematics equations.
   //You can use l_1, l_2 for the lenth of each link and set_point_1 and set_point_2 for the joint angles.
+
+//  x_e = ;
+//  y_e = ;
 }
 
 // ================================================================
@@ -237,9 +251,20 @@ void Inverse_K()
   //TO DO
   //In the lab2, we have learned how to implement inverse kinematics of the 2 DOF manipulator.
   //You can use l_1, l_2 for the lenth of each link and x_e and y_e for the end-effector position.
-
-  // position limit constraints (update set_point_1 and set_point_2 when they are within the limits)
   
+  q_2_ik = ; // change the sign of q_2 for another solution, here one solution is sufficient
+  q_1_ik = ;
+  
+  // position limit constraints (update set_point_1 and set_point_2 when they are within the limits)
+  if (abs(set_point_1) < q1_limit && abs(set_point_2) < q2_limit)
+  {
+    set_point_1 = q_1_ik;
+    set_point_2 = q_2_ik;
+  }
+  else
+  {
+    Serial.print("Joint limit reached!");
+  }
 }
 
 // ================================================================
